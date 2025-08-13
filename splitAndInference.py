@@ -2,10 +2,12 @@ import cv2
 import os
 import numpy as np
 from ultralytics import YOLO
+import time
+from datetime import datetime
 
 # Configuration
 input_folder = "./images"
-output_folder = "./output"
+output_folder = "./output_manual"
 split_width = 640
 split_height = 640
 overlap = 0.0
@@ -91,7 +93,15 @@ for filename in os.listdir(input_folder):
         # Draw all detected mask centroids on the full image
         for (x, y) in detected_centers:
             cv2.circle(full_annotated, (x, y), radius=5, color=(0, 0, 255), thickness=-1)
+        # Get current timestamp (float)
+        timestamp = time.time()
 
-        out_path = os.path.join(output_folder, f"{os.path.splitext(filename)[0]}_annotatedSImg.jpg")
+        # Convert timestamp to datetime object
+        dt = datetime.fromtimestamp(timestamp)
+
+        # Format datetime as string, for example: "YYYY-MM-DD HH:MM:SS"
+        formatted_time = dt.strftime("%Y-%m-%d %H:%M:%S")
+
+        out_path = os.path.join(output_folder, f"{os.path.splitext(filename)[0]}_{formatted_time}.jpg")
         cv2.imwrite(out_path, full_annotated)
         print(f"[INFO] Saved annotated image to: {out_path}")

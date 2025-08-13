@@ -8,10 +8,11 @@ from datetime import datetime
 # Configuration
 input_folder = "./images"
 output_folder = "./output"
+output_folder_clean = "./output_clean"
 split_width = 640
 split_height = 640
 overlap = 0.0
-model_path = "best.pt"
+model_path = "bestCloverYOLOv8.pt"
 
 
 def start_points(size, split_size, overlap=0):
@@ -91,9 +92,11 @@ def return_coords_from_image(img):
     # Convert timestamp to datetime object
     dt = datetime.fromtimestamp(timestamp)
 
-    # Format datetime as string, for example: "YYYY-MM-DD HH:MM:SS"
-    formatted_time = dt.strftime("%Y-%m-%d %H:%M:%S")
+    # Format datetime as string, for example: "YYYY-MM-DD HH_MM_SS"
+    formatted_time = dt.strftime("%Y-%m-%d %H_%M_%S")
     out_path = os.path.join(output_folder, f"{formatted_time}.jpg")
+    out_path_clean = os.path.join(output_folder_clean, f"{formatted_time}_clean.jpg")
+    cv2.imwrite(out_path_clean, img)
     cv2.imwrite(out_path, full_annotated)
     print(f"[INFO] Saved annotated image to: {out_path}")
     return detected_centers
