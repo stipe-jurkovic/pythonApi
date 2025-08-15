@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 import numpy as np
 import cv2
 from returnCoordsFromImage import return_coords_from_image
+import base64
 
 app = FastAPI()
 
@@ -23,11 +24,20 @@ async def upload_image(image: UploadFile = File(...)):
     if img is None:
         return JSONResponse({"error": "Ne mogu dekodirati sliku"}, status_code=400)
 
-    coords = return_coords_from_image(img)
+    coords, fully_annotated_image = return_coords_from_image(img)
     print(f"[INFO] Coordinates extracted: {coords}")
+    # Convert NumPy array to raw bytes
+    # Encode as JPEG with compression (quality 70 out of 100)
+    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
+    success, jpeg_bytes = cv2.imencode(".jpg", fully_annotated_image, encode_param)
+    if not success:
+        return JSONResponse({"error": "Failed to encode image as JPEG"}, status_code=500)
 
+    # Base64 encode the compressed JPEG
+    img_base64 = base64.b64encode(jpeg_bytes.tobytes()).decode("utf-8")
     return JSONResponse({
         "message": "Image processed successfully",
         "filename": image.filename,
         "coords": coords,
+        "fully_annotated_image": img_base64
     })

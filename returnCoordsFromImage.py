@@ -13,6 +13,7 @@ split_width = 640
 split_height = 640
 overlap = 0.0
 model_path = "bestCloverYOLOv8.pt"
+conf = 0.2
 
 
 def start_points(size, split_size, overlap=0):
@@ -60,7 +61,7 @@ def return_coords_from_image(img):
             split = img[i:i+split_height, j:j+split_width].copy()
 
             # Run segmentation prediction
-            results = model.predict(source=split, conf=0.02, verbose=False, task='segment')[0]
+            results = model.predict(source=split, conf=conf, verbose=False, task='segment')[0]
 
             # Draw results on patch
             annotated = results.plot()
@@ -99,4 +100,4 @@ def return_coords_from_image(img):
     cv2.imwrite(out_path_clean, img)
     cv2.imwrite(out_path, full_annotated)
     print(f"[INFO] Saved annotated image to: {out_path}")
-    return detected_centers
+    return detected_centers, full_annotated
