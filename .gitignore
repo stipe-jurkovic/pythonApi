@@ -3,3 +3,8 @@ runs/
 uploaded_images/
 apienv/
 __pycache__/
+latest_output/
+output_clean/
+uploaded_images/
+images/
+output_manual/
