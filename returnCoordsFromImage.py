@@ -14,7 +14,7 @@ split_width = 640
 split_height = 640
 overlap = 0.0
 model_path = "bestCloverYOLOv8.pt"
-conf = 0.1
+conf = 0.05
 
 
 def start_points(size, split_size, overlap=0):
