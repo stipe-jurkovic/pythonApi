@@ -5,6 +5,7 @@ from ultralytics import YOLO
 import time
 from datetime import datetime
 
+
 # Configuration
 input_folder = "./images"
 output_folder = "./output"
